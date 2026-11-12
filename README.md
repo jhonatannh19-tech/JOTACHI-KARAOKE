@@ -1,4 +1,33 @@
+name: Build JOTACHI Karaoke APK
 
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Generate android/ and dependencies
+        run: bash setup.sh
+      - name: Build APK
+        run: flutter build apk --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: JOTACHI-KARAOKE-APK
+          path: build/app/outputs/flutter-apk/app-release.apk
 name: Build JOTACHI Karaoke APK
 
 on:
