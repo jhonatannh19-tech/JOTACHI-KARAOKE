@@ -33,11 +33,16 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-      - name: Generate android and dependencies
-        run: bash setup.sh
-      - name: Build APK
-        run: flutter build apk --release
-      - uses: actions/upload-artifact@v4
-        with:
-          name: JOTACHI-KARAOKE-APK
-          path: build/app/outputs/flutter-apk/app-release.apk
+            - name: Raise compileSdk for plugins
+        run: |
+          mkdir -p ~/.gradle/init.d
+          cat > ~/.gradle/init.d/sdk.gradle <<'EOF'
+          allprojects {
+              afterEvaluate { p ->
+                  def ext = p.extensions.findByName('android')
+                  if (ext != null && p.plugins.hasPlugin('com.android.library')) {
+                      ext.compileSdkVersion(36)
+                  }
+              }
+          }
+          EOF
