@@ -1,12 +1,9 @@
-
-
 name: Build JOTACHI Karaoke APK
 
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: [main]
 
 permissions:
   contents: read
@@ -16,24 +13,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
+      - name: Extract source zip
+        run: |
+          unzip -o jotachi_karaoke.zip -d _src
+          if [ "$(ls -A _src | wc -l)" = "1" ] && [ -d "_src/$(ls _src)" ]; then
+            cp -a _src/*/. .
+          else
+            cp -a _src/. .
+          fi
+          rm -rf _src
+          ls -la
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
-
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-
-      - name: Install dependencies
-        run: flutter pub get
-
+      - name: Generate android and dependencies
+        run: bash setup.sh
       - name: Build APK
         run: flutter build apk --release
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: JOTACHI-KARAOKE-APK
           path: build/app/outputs/flutter-apk/app-release.apk
