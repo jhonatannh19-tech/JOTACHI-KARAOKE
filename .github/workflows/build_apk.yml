@@ -33,7 +33,9 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-            - name: Raise compileSdk for plugins
+      - name: Generate android and dependencies
+        run: bash setup.sh
+      - name: Raise compileSdk for plugins
         run: |
           mkdir -p ~/.gradle/init.d
           cat > ~/.gradle/init.d/sdk.gradle <<'EOF'
@@ -46,3 +48,9 @@ jobs:
               }
           }
           EOF
+      - name: Build APK
+        run: flutter build apk --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: JOTACHI-KARAOKE-APK
+          path: build/app/outputs/flutter-apk/app-release.apk
