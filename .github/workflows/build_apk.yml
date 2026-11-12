@@ -22,7 +22,10 @@ jobs:
             cp -a _src/. .
           fi
           rm -rf _src
-          ls -la
+      - name: Patch known build errors
+        run: |
+          grep -q dependency_overrides pubspec.yaml || printf '\ndependency_overrides:\n  record_linux: ^1.1.0\n' >> pubspec.yaml
+          sed -i 's/CardTheme(/CardThemeData(/' lib/theme/app_theme.dart
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
