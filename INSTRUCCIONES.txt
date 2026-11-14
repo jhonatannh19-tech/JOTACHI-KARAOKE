@@ -1,0 +1,10 @@
+# Paquete de logo JOTACHI KARAOKE
+
+Incluye:
+- `assets/jotachi_logo.png`: logo cuadrado con cantante y micrófono.
+- `.github/scripts/apply_branding.sh`: instala el logo como icono Android y pantalla de inicio.
+- `.github/workflows/build_apk.yml`: workflow actualizado para aplicar el logo antes de compilar.
+
+Importante: el workflow asume que el proyecto Flutter se extrae desde `jotachi_karaoke.zip`, igual que en el workflow existente.
+Sube estos tres archivos a las mismas rutas del repositorio `jhonatannh19-tech/JOTACHI-KARAOKE` y confirma el commit.
+Luego abre Actions y ejecuta `Build JOTACHI Karaoke APK` con `Run workflow` (o espera el push).
